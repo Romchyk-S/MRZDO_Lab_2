@@ -105,13 +105,13 @@ class Item:
         return self
         
     
-    def add_to_group(self):
+    def add_to_group(self, next_group: int):
         
         if self.group == 0:
         
             if self.previous_item == 0:
                 
-                self.group = self.num
+                self.group = next_group
                 
             else:
                 
