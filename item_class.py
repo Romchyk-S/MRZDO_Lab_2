@@ -39,12 +39,11 @@ class Item:
             
         except:
             
-            self.previous_item = 0
+            self.previous_item = None
             
     def __repr__(self) -> str:
         
         return f"{self.num}"
-    
     
     @property
     def num(self) -> int:
@@ -94,11 +93,11 @@ class Item:
     @previous_item.setter
     def previous_item(self, previous_item: int|Item) -> None:
         
-        self._previous_item = previous_item        
-    
+        self._previous_item = previous_item     
+        
     def add_link_to_item(self, items: list) -> Item:
         
-        if self.previous_item != 0:
+        if self.previous_item != None:
             
             self.previous_item = items[self.previous_item-1]
             
@@ -109,7 +108,7 @@ class Item:
         
         if self.group == 0:
         
-            if self.previous_item == 0:
+            if self.previous_item == None:
                 
                 self.group = next_group
                 
@@ -121,7 +120,7 @@ class Item:
                     
                 else:
                     
-                    self.previous_item.add_to_group()
+                    self.previous_item.add_to_group(next_group)
                     
                     self.group = self.previous_item.group
                     
