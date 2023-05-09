@@ -264,7 +264,7 @@ def calculate_u_b(value: float, max_weight: float, weight: float, group_next: li
 
     return value + (max_weight-weight)*u_next
 
-def build_vertex_including(groups_sort: list, group: list, weight: float, value: float, u_b: float) -> tuple[float]:
+def build_vertex_including(groups_sort: list, group: list, weight: float, value: float) -> tuple[float]:
     
     group_parameters = group[1]
     
@@ -273,12 +273,6 @@ def build_vertex_including(groups_sort: list, group: list, weight: float, value:
     value_node = value+group_parameters[2]
         
     return weight_node, value_node
-    
-def build_vertex_excluding(weight: float, value: float, max_weight: float, index: int, group_next: list) -> float:
-    
-    u_b = calculate_u_b(value, max_weight, weight, group_next, index)
-    
-    return u_b
 
 def build_tree(index: int, max_weight: float, weight: float, value: float, u_b: float, groups_sort: list, item_amount: int) -> tuple:
     
@@ -289,44 +283,52 @@ def build_tree(index: int, max_weight: float, weight: float, value: float, u_b: 
     root = bt.Node(f"w={weight},v={value},u_b={u_b}")
     
     active_node = root
-    
+
     while i < len(groups_sort):
         
         group = groups_sort[i]
         
-        weight_left, value_left = build_vertex_including(groups_sort, group, weight, value, u_b)
+        weight_left, value_left = build_vertex_including(groups_sort, group, weight, value)
         
+        try:
+            
+            u_b_left = calculate_u_b(value_left, max_weight, weight_left, groups_sort[i+1], index)
+            
+        except IndexError:
+            
+            u_b_left = value
+        
+       
         if weight_left > max_weight:
             
             new_node_left = bt.Node(f"w={weight_left}")
             
         else:
             
-            new_node_left = bt.Node(f"w={weight_left},v={value_left},u_b={u_b}")
+            new_node_left = bt.Node(f"w={weight_left},v={value_left},u_b={u_b_left}")
             
         try:
-        
-            u_b_right = build_vertex_excluding(weight, value, max_weight, index, groups_sort[i+1])
-        
+            
+            u_b_right = calculate_u_b(value, max_weight, weight, groups_sort[i+1], index)
+            
         except IndexError:
             
-            u_b_right = u_b
+            u_b_right = value
         
+
         new_node_right = bt.Node(f"w={weight},v={value},u_b={u_b_right}")
         
         active_node.left = new_node_left
         
         active_node.right = new_node_right
         
-        if weight_left > max_weight or u_b_right > u_b:
+        if weight_left > max_weight or u_b_right > u_b_left:
             
             # choosing the right node, group is not added.
         
             active_node = active_node.right
             
-            u_b = u_b_right
-            
-        elif u_b_right < u_b:
+        elif u_b_right < u_b_left:
             
             # choosing the left node, group is added.
             
