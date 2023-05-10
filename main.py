@@ -7,36 +7,58 @@ This is a temporary script file.
 
 import working_functions as wf
 
+import graphic_interface as gi
+
+import graphic_interface_random as gir
+
 
 file_name = "example.txt"
 
-lower_weight = 1.0
-
-upper_weight = 10.0
-
-lower_value = 1.0
-
-upper_value = 10.0
-
-ordering_probability = 0.2
-
 criterions = ["u_1", "u_2"]
 
+parms = ["max_weight", "choice"]
 
-max_weight = wf.get_weight_input()
-
-choice = wf.get_option()
-
+random_parms = ["item_amount", "lower_weight", "upper_weight", "lower_value", "upper_value", "ordering_probability"]
 
 
-items, item_amount = wf.get_items(choice, file_name, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
 
-while item_amount > 100:
+
+parms_dict = gi.main_work(parms)
+
+print("Задано параметри")
+
+print(parms_dict)
+
+print()
+
+max_weight = abs(parms_dict.get(parms[0], 7.0))
+
+if ".txt" in parms_dict.get(parms[1]):
+
+    items = wf.get_items_from_file(file_name)
     
-    print("Зменшіть кільксть предметів")
+    item_amount = len(items)
+
+else:  
     
-    items, item_amount = wf.get_items(choice, file_name, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
+    random_parms_dict = gir.main_work(random_parms)
     
+    print("Параметри випадкової генерації предметів")
+    
+    print(random_parms_dict)
+    
+    print()
+    
+    item_amount = int(random_parms_dict.get(random_parms[0], 10))
+    
+    lower_weight, upper_weight = round(random_parms_dict.get(random_parms[1]), 2), round(random_parms_dict.get(random_parms[2]), 2)
+    
+    lower_value, upper_value = round(random_parms_dict.get(random_parms[3]), 2), round(random_parms_dict.get(random_parms[4]), 2)
+    
+    ordering_probability = random_parms_dict.get(random_parms[5])
+    
+    items = wf.create_items(item_amount, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
+
 
 items = list(map(lambda i: i.add_link_to_item(items), items))
 
@@ -67,7 +89,7 @@ else:
         
         root, res_vector, weight, value = wf.solve(groups_with_u, c, max_weight, item_amount)
 
-        with open(f"{c}.txt", "w") as f:
+        with open(f"{c}.txt", "w", encoding = "UTF-8") as f:
             
             f.write("Бінарне дерево:")
             
@@ -75,8 +97,8 @@ else:
 
         print(f"Результат: {res_vector}")
         
-        print(f"W = {weight}")
+        print(f"W = {round(weight, 2)}")
         
-        print(f"V = {value}")
+        print(f"V = {round(value, 2)}")
         
         print()

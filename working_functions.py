@@ -13,62 +13,11 @@ import binarytree as bt
 
 import random as r
     
-
-def get_weight_input() -> float:
-    
-    try:
-
-        max_weight = float(input("Введіть максимальну вагу рюкзака: "))
-        
-    except ValueError:
-        
-        print("Потрібно ввести число")
-        
-        print()
-        
-        max_weight = get_weight_input()
-        
-    print()
-        
-    return max_weight
-
-def get_option():
-    
-    choice = int(input("Оберіть метод отримання предметів (0: з файлу, 1: випадково) "))
-    
-    while choice not in [0, 1]:
-        
-        print("Неправильний вибір")
-        
-        print()
-        
-        choice = get_option()
-        
-    print()
-    
-    return choice
-
-def get_item_amount_input() -> int:
-    
-    try:
-
-        item_amount = int(input("Введіть кількість предметів: "))
-        
-    except ValueError:
-        
-        print("Потрібно ввести число")
-        
-        print()
-        
-        item_amount = get_item_amount_input()
-        
-    print()
-        
-    return item_amount
-
 def create_items(item_amount: int, lower_weight: float, upper_weight: float, lower_value: float, upper_value: float, probability: float) -> list:
     
     items = []
+    
+    previous_order = [i for i in range(1, item_amount+1)]
     
     i = 0
     
@@ -82,13 +31,15 @@ def create_items(item_amount: int, lower_weight: float, upper_weight: float, low
         
         if num <= probability:
             
-            previous_item = r.randint(1, item_amount)
+            previous_item = r.choice(previous_order)
             
             while previous_item == i+1:
                 
-                previous_item = r.randint(1, item_amount)
+                previous_item = r.choice(previous_order)
         
             new_item = ic.Item([i+1, item_weight, item_value, previous_item])
+            
+            previous_order.remove(previous_item)
         
         else:
             
@@ -115,22 +66,6 @@ def get_items_from_file(file_name: str) -> list:
             items.append(new_item)
 
     return items
-
-def get_items(choice: int, file_name: str, lower_weight: float, upper_weight: float, lower_value: float, upper_value: float, ordering_probability: float) -> tuple:
-    
-    if choice == 0:
-
-        items = get_items_from_file(file_name)
-        
-        item_amount = len(items)
-        
-    elif choice == 1:
-        
-        item_amount = get_item_amount_input()
-        
-        items = create_items(item_amount, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
-
-    return items, item_amount
 
 def print_items_to_table(items: list) -> None:
     
@@ -298,7 +233,6 @@ def build_tree(index: int, max_weight: float, weight: float, value: float, u_b: 
             
             u_b_left = value
         
-       
         if weight_left > max_weight:
             
             new_node_left = bt.Node(f"w={weight_left}")
@@ -328,7 +262,7 @@ def build_tree(index: int, max_weight: float, weight: float, value: float, u_b: 
         
             active_node = active_node.right
             
-        elif u_b_right < u_b_left:
+        elif u_b_right < u_b_left or value_left > value:
             
             # choosing the left node, group is added.
             

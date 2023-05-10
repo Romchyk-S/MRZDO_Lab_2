@@ -1,0 +1,4 @@
+binarytree==6.5.1
+customtkinter==5.0.1
+prettytable==3.3.0
+RangeSlider==2021.7.4
