@@ -67,7 +67,7 @@ def pack_conditions(root: ctk.windows.ctk_tk.CTk, variables: list):
     
     label_2.pack()
     
-    slider_2 = rs.RangeSliderH(root, variables = variables[1:3], padX = 20, min_val = 0.1, max_val = 20)
+    slider_2 = rs.RangeSliderH(root, variables = variables[1:3], padX = 20, min_val = 1, max_val = 20)
     
     slider_2.pack()
     
@@ -77,7 +77,7 @@ def pack_conditions(root: ctk.windows.ctk_tk.CTk, variables: list):
     
     label_3.pack()
     
-    slider_3 = rs.RangeSliderH(root, variables[3:5], padX = 20, min_val = 0.1, max_val = 20)
+    slider_3 = rs.RangeSliderH(root, variables[3:5], padX = 20, min_val = 1, max_val = 100)
     
     slider_3.pack()
     

@@ -74,7 +74,7 @@ def pack_main_parms(root: ctk.windows.ctk_tk.CTk, variables: list):
     
     label_2.pack()
     
-    textbox_2 = ctk.CTkOptionMenu(root, variable = variables[1], values = ["З файлу example.txt", "Випадковим чином"])
+    textbox_2 = ctk.CTkOptionMenu(root, variable = variables[1], values = ["З файлу example.txt", "З файлу example_1.txt", "Випадковим чином"])
     
     textbox_2.pack()
 
