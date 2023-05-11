@@ -92,7 +92,12 @@ for item in items:
     total_weight += item.weight
     
     total_value += item.value
+    
+print()
 
+print("Сформовано груп:")
+
+print(len(groups_with_u))
 
 print()
 
