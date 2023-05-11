@@ -5,6 +5,8 @@ Spyder Editor
 This is a temporary script file.
 """
 
+import time as tm
+
 import graphic_interface as gi
 
 import graphic_interface_random as gir
@@ -125,6 +127,8 @@ else:
         
         print(f"Розв'язок для критерію {c}")
         
+        start = tm.perf_counter()
+        
         root, res_vector, weight, value = solve.solve(groups_with_u, c, max_weight, item_amount)
 
         with open(f"{c}.txt", "w", encoding = "UTF-8") as f:
@@ -138,5 +142,7 @@ else:
         print(f"W = {round(weight, 2)}")
         
         print(f"V = {round(value, 2)}")
+        
+        print(f"Розв'язано за {round(tm.perf_counter()-start, 2)} секунд")
         
         print()
