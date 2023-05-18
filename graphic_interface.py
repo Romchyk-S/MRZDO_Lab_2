@@ -37,7 +37,6 @@ def main_work(parms: list[str]) -> dict:
     root.geometry('700x700')
     
     
-    
     working_parms = Program_parameters()
     
     var_inside_1 = ctk.DoubleVar(value = 1.0)
@@ -45,7 +44,6 @@ def main_work(parms: list[str]) -> dict:
     var_inside_2 = ctk.StringVar()
     
     variables = [var_inside_1, var_inside_2]
-    
     
     
     pack_main_parms(root, variables[0:2])

@@ -43,9 +43,45 @@ def group_items(items: list) -> dict:
             
             groups[i.group] = [i]
             
-        next_group = i.group+1   
+            next_group += 1  
+        
+    order_items_in_groups(groups)
     
     return groups   
+
+def order_items_in_groups(groups: dict) -> None:
+    
+    for g in groups:
+  
+        if len(groups[g]) > 1:
+            
+            new_list = []
+            
+            for h in groups[g]:
+                
+                is_previous = False
+                
+                for j in groups[g]:
+                    
+                    if j.previous_item == h:
+                        
+                        is_previous = True
+                        
+                        break
+                    
+                if not(is_previous):
+                    
+                    new_list.append(h)
+            
+            item = new_list[0]
+            
+            while item.previous_item != None:
+                
+                item = item.previous_item
+                
+                new_list.append(item)
+            
+            groups[g] = new_list[::-1]
 
 def form_table(groups: dict, weight_limit: float) -> tuple:
     

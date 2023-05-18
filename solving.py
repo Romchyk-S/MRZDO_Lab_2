@@ -46,8 +46,7 @@ def move_up_level(root_node: bt.Node, active_node: bt.Node) -> int:
                 return k-1
 
         k += 1
-            
-    
+               
 
 def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, item_amount: int) -> tuple:
     
@@ -60,6 +59,13 @@ def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, ite
     active_node = root
             
     res_vector = [0 for i in range(0, item_amount)]
+    
+    node_values = active_node.value.split(",")
+    
+    active_weight = float(node_values[1].split("=")[1])
+    
+    active_value = float(node_values[2].split("=")[1])
+        
 
     while i < len(groups_sort):
    
@@ -72,13 +78,7 @@ def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, ite
         except IndexError:
         
             next_group = [None]
-        
-        node_values = active_node.value.split(",")
-        
-        active_weight = float(node_values[1].split("=")[1])
-        
-        active_value = float(node_values[2].split("=")[1])
-        
+
         
         weight_left, value_left = build_vertex_including(groups_sort, group, active_weight, active_value)
         
@@ -104,7 +104,6 @@ def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, ite
                 
             res_vector_temp = ' '.join(map(str, res_vector_temp))
             
-            
             new_node_left = bt.Node(f"group={next_group[0]},w={weight_left},v={value_left},u_b={u_b_left},res={str(res_vector_temp)}")
             
         try:
@@ -119,9 +118,7 @@ def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, ite
         
         new_node_right = bt.Node(f"group={next_group[0]},w={active_weight},v={active_value},u_b={u_b_right},res={res_vector}")
         
-        active_node.left = new_node_left
-        
-        active_node.right = new_node_right
+        active_node.left, active_node.right = new_node_left, new_node_right
         
         nodes_hanging = [node for node in root.leaves if len(node.value.split(",")) > 2]
         
@@ -132,7 +129,6 @@ def build_tree(index: int, max_weight: float, u_b: float, groups_sort: list, ite
         active_node = nodes_hanging_dict_sorted[0][0]
         
         node_values = active_node.value.split(",")
-        
         
         group_active = node_values[0].split("=")[1]
         

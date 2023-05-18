@@ -18,8 +18,6 @@ import item_groupping as ig
 import solving as solve
 
 
-
-
 criterions = ["u_1", "u_2"]
 
 parms = ["max_weight", "choice"]
@@ -49,7 +47,7 @@ elif "example_1.txt" in parms_dict.get(parms[1]):
     items = ic.get_items_from_file("example_1.txt")
     
     item_amount = len(items)
-
+    
 else:  
     
     random_parms_dict = gir.main_work(random_parms)

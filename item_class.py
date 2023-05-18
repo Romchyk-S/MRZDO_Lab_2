@@ -114,7 +114,7 @@ class Item:
                 
             else:
                 
-                if self.previous_item.num < self.num:
+                if self.previous_item.group != 0:
                 
                     self.group = self.previous_item.group
                     
@@ -123,4 +123,3 @@ class Item:
                     self.previous_item.add_to_group(next_group)
                     
                     self.group = self.previous_item.group
-                    
