@@ -13,6 +13,8 @@ import item_groupping as ig
 import solving as solve
 
 
+failed = False
+
 criterions = ["u_1", "u_2"]
 
 parms = ["max_weight", "choice"]
@@ -29,113 +31,153 @@ print(parms_dict)
 
 print()
 
-max_weight = abs(parms_dict.get(parms[0], 7.0))
+try:
 
-if "example.txt" in parms_dict.get(parms[1]):
+    max_weight = abs(parms_dict.get(parms[0], 7.0))
 
-    items = ic.get_items_from_file("example.txt")
+except AttributeError:
     
-    item_amount = len(items)
+    failed = True
     
-elif "example_1.txt" in parms_dict.get(parms[1]):
-
-    items = ic.get_items_from_file("example_1.txt")
+    print("ПОМИЛКИ У ВВЕДЕННІ:")
     
-    item_amount = len(items)
-    
-else:  
-    
-    random_parms_dict = gir.main_work(random_parms)
-    
-    print("Параметри випадкової генерації предметів")
-    
-    print(random_parms_dict)
+    print("Вагу введено не числом.")
     
     print()
     
-    item_amount = int(random_parms_dict.get(random_parms[0], 10))
+if not(failed):
     
-    lower_weight, upper_weight = round(random_parms_dict.get(random_parms[1]), 2), round(random_parms_dict.get(random_parms[2]), 2)
+    try:
     
-    lower_value, upper_value = round(random_parms_dict.get(random_parms[3]), 2), round(random_parms_dict.get(random_parms[4]), 2)
-    
-    ordering_probability = random_parms_dict.get(random_parms[5])
-    
-    items = ic.create_items(item_amount, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
-
-
-items = list(map(lambda i: i.add_link_to_item(items), items))
-
-print("Предмети")
-
-ig.print_items_to_table(items)
-
-
-
-groups = ig.group_items(items)
-
-group_table, group_table_with_weight_limits, group_table_with_u, groups_with_u, added_rows = ig.form_table(groups, max_weight)
-
-ig.print_tables(group_table, group_table_with_weight_limits, group_table_with_u, added_rows)
-
-
-
-total_weight, total_value = 0, 0
-
-for item in items:
-    
-    total_weight += item.weight
-    
-    total_value += item.value
-    
-print()
-
-print("Сформовано груп:")
-
-print(len(groups_with_u))
-
-print()
-
-if len(groups_with_u) == 0:
-    
-    print("Рюкзак заповнити неможливо.")
-    
-elif total_weight <= max_weight:
-    
-    print("Вага рюкзака >= вазі всіх предметів.")
-    
-    res_vector = [1 for i in range(0, item_amount)]
-    
-    print(f"Результат: {res_vector}")
-    
-    print(f"W = {round(total_weight, 2)}")
-    
-    print(f"V = {round(total_value, 2)}")
-    
-    print()
-    
-else:
-    
-    for c in criterions:
+        if "example.txt" in parms_dict.get(parms[1]):
         
-        print(f"Розв'язок для критерію {c}")
-        
-        start = tm.perf_counter()
-        
-        root, res_vector, weight, value = solve.solve(groups_with_u, c, max_weight, item_amount)
-
-        with open(f"{c}.txt", "w", encoding = "UTF-8") as f:
+            items = ic.get_items_from_file("example.txt")
             
-            f.write("Бінарне дерево:")
+            item_amount = len(items)
             
-            f.write(f"{root}")
-
-        print(f"Результат: {res_vector}")
+        elif "example_1.txt" in parms_dict.get(parms[1]):
         
-        print(f"W = {round(weight, 2)}")
+            items = ic.get_items_from_file("example_1.txt")
+            
+            item_amount = len(items)
+            
+        elif parms_dict.get(parms[1]) != '':  
+            
+            random_parms_dict = gir.main_work(random_parms)
+            
+            print("Параметри випадкової генерації предметів: ")
+            
+            print(random_parms_dict)
+            
+            print()
+            
+            try:
+            
+                item_amount = int(random_parms_dict.get(random_parms[0], 10))
+                
+                lower_weight, upper_weight = round(random_parms_dict.get(random_parms[1]), 2), round(random_parms_dict.get(random_parms[2]), 2)
+                
+                lower_value, upper_value = round(random_parms_dict.get(random_parms[3]), 2), round(random_parms_dict.get(random_parms[4]), 2)
+                
+                ordering_probability = random_parms_dict.get(random_parms[5])
+                
+                items = ic.create_items(item_amount, lower_weight, upper_weight, lower_value, upper_value, ordering_probability)
+                
+            except AttributeError:
+                
+                failed = True
+                
+                print("Параметри не було записано.")
+                
+                print()
         
-        print(f"V = {round(value, 2)}")
+        else:
+            
+            raise AttributeError
+            
+    except AttributeError:
         
-        print(f"Розв'язано за {round(tm.perf_counter()-start, 2)} секунд")
+        failed = True
+        
+        print("Вибір опції отримання параметрів не було здійснено.")
         
         print()
+        
+    if not(failed):
+    
+    
+        items = list(map(lambda i: i.add_link_to_item(items), items))
+        
+        print("Предмети")
+        
+        ig.print_items_to_table(items)
+        
+        
+        
+        groups = ig.group_items(items)
+        
+        group_table, group_table_with_weight_limits, group_table_with_u, groups_with_u, added_rows = ig.form_table(groups, max_weight)
+        
+        ig.print_tables(group_table, group_table_with_weight_limits, group_table_with_u, added_rows)
+        
+        
+        
+        total_weight, total_value = 0, 0
+        
+        for item in items:
+            
+            total_weight += item.weight
+            
+            total_value += item.value
+            
+        print()
+        
+        print("Сформовано груп:")
+        
+        print(len(groups_with_u))
+        
+        print()
+        
+        if len(groups_with_u) == 0:
+            
+            print("Рюкзак заповнити неможливо.")
+            
+        elif total_weight <= max_weight:
+            
+            print("Вага рюкзака >= вазі всіх предметів.")
+            
+            res_vector = [1 for i in range(0, item_amount)]
+            
+            print(f"Результат: {res_vector}")
+            
+            print(f"W = {round(total_weight, 2)}")
+            
+            print(f"V = {round(total_value, 2)}")
+            
+            print()
+            
+        else:
+            
+            for c in criterions:
+                
+                print(f"Розв'язок для критерію {c}")
+                
+                start = tm.perf_counter()
+                
+                root, res_vector, weight, value = solve.solve(groups_with_u, c, max_weight, item_amount)
+        
+                with open(f"{c}.txt", "w", encoding = "UTF-8") as f:
+                    
+                    f.write("Бінарне дерево:")
+                    
+                    f.write(f"{root}")
+        
+                print(f"Результат: {res_vector}")
+                
+                print(f"W = {round(weight, 2)}")
+                
+                print(f"V = {round(value, 2)}")
+                
+                print(f"Розв'язано за {round(tm.perf_counter()-start, 2)} секунд")
+                
+                print()

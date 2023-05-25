@@ -5,9 +5,10 @@ Created on Thu May 11 13:45:51 2023
 @author: romas
 """
 
+import random as r
+
 import item_class as ic
 
-import random as r
 
 def create_items(item_amount: int, lower_weight: float, upper_weight: float, lower_value: float, upper_value: float, probability: float) -> list:
     

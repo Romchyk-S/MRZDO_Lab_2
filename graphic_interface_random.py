@@ -50,7 +50,7 @@ def pack_conditions(root: ctk.windows.ctk_tk.CTk, variables: list):
         
         label.configure(text = f"{int(value)}")
       
-    label = ctk.CTkLabel(root, text = "0")
+    label = ctk.CTkLabel(root, text = "5")
     
     label.pack()
     
