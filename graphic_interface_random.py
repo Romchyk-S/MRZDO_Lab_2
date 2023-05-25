@@ -5,7 +5,6 @@ Created on Wed May 10 11:55:17 2023
 @author: romas
 """
 
-
 import customtkinter as ctk
 
 import graphic_interface as gi

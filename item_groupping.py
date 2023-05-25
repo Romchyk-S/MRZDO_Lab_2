@@ -5,7 +5,6 @@ Created on Thu May 11 13:47:09 2023
 @author: romas
 """
 
-
 import prettytable as pt
 
 
